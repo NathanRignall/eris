@@ -149,7 +149,7 @@ fn update_hosts_file(new_section: &str) -> std::io::Result<()> {
 // On Windows, convert a string to a wide string (u16).
 #[cfg(windows)]
 fn to_wide(s: &str) -> Vec<u16> {
-    OsStr::new(s).encode_wide().chain(Some(0)).collect()
+    std::ffi::OsStr::new(s).encode_wide().chain(Some(0)).collect()
 }
 
 // On Windows, add a certificate to the root store.
@@ -206,7 +206,7 @@ fn run(repo_url: &str, file_path: &str) -> Result<(), Box<dyn std::error::Error>
     if ask_yes_no("Do you want to update the certificate?")? {
         #[cfg(windows)]
         {
-            let cert_data: &[u8] = include_bytes!("TestRootCA.cer");
+            let cert_data: &[u8] = include_bytes!("demo/test_root_ca.cer");
             add_certificate_to_root_store(cert_data)?;
             println!("Certificate added to the root store successfully.");
         }
